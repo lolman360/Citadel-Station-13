@@ -49,6 +49,7 @@
 	"chest" = null,
 	"boots" = null,
 	"gloves" = null,
+	"vision" = null
 	)
 
 /obj/item/rigcontrol/Initialize(mapload)
