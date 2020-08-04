@@ -31,29 +31,32 @@
 	var/active = FALSE //we start uninitialized
 	//heat
 	var/heat_dissipation = 10 //10 degrees of heat removed every process tick
-	var/heat = 293 //starts at 20 degreees c heat
+	var/righeat = 293 //starts at 20 degreees c heat
 	var/maxheat = 400 //400 kelvin
 	var/insulated = FALSE //insulated rigs don't car about environment temp and dont heat up/cool down in wierd atmos.
 	var/heatmod = 1//heat generated modifier
 	//modules.
 	var/module_classes = list(
-	head = MODULE_CLASS_NONE,
-	chest = MODULE_CLASS_NONE,
-	boots = MODULE_CLASS_NONE,
-	gloves = MODULE_CLASS_NONE
-	vision = MODULE_CLASS_VISION
-
+	"head" = MODULE_CLASS_NONE,
+	"chest" = MODULE_CLASS_NONE,
+	"boots" = MODULE_CLASS_NONE,
+	"gloves" = MODULE_CLASS_NONE,
+	"vision" = MODULE_CLASS_VISION
 	)
+
 	var/module_slots = list(
-	head = null,
-	chest = null,
-	boots = null,
-	gloves = null,
-	vision = null
+	"head" = null,
+	"chest" = null,
+	"boots" = null,
+	"gloves" = null,
 	)
 
 /obj/item/rigcontrol/Initialize(mapload)
 	START_PROCESSING(SSobj, src)
+	righelm = new /obj/item/clothing/head/helmet/rig(src)
+	rigchest = new /obj/item/clothing/suit/rig(src)
+	rigboots = new /obj/item/clothing/shoes/magboots/rig(src)
+	riggloves = new /obj/item/clothing/gloves/rig(src)
 
 
 /obj/item/rigcontrol/Destroy()
@@ -69,18 +72,21 @@
 	if(!rigboots)
 		return FALSE
 	//module classes
-	module_classes[head] = righelm.modclass
-	module_classes[chest] = rigchest.modclass
-	module_classes[boots] = rigboots.modclass
-	module_classes[gloves] =
+	module_classes["head"] = righelm.modclass
+	module_classes["chest"] = rigchest.modclass
+	module_classes["boots"] = rigboots.modclass
+	module_classes["gloves"] = riggloves.modclass
 
 	//heatmod
-	heatmod = 1 + rigchest.heatmod + rigboots.heatmod
-	heat_dissipation = 10 + righelm.dissipation + rigchest.dissipation + rigboots.dissipation + riggloves.dissipation
+//	heatmod = 1 + rigchest.heatmod + rigboots.heatmod               commented out intil i do things
+//	heat_dissipation = 10 + righelm.dissipation + rigchest.dissipation + rigboots.dissipation + riggloves.dissipation
 
 
 
-
+/obj/item/rigcontrol/AltClick(mob/user)
+	if(ishuman(user))
+		var/mob/living/carbon/human/H = user
+		deploy(H)
 
 
 
@@ -94,11 +100,27 @@
 /obj/item/rigcontrol/proc/deploy(mob/living/carbon/human/H)
 	if(src.loc != H)
 		to_chat(H, "You can't deploy the suit if you're not wearing it!")
-	if(H.equip_to_slot_if_possible(righelm,SLOT_HEAD,0,0,1)
+	if(H.equip_to_slot_if_possible(righelm,SLOT_HEAD,0,0,1))
 		to_chat(H, "The [righelm] deploys from the control module.")
-	if(H.equip_to_slot_if_possible(rigchest,SLOT_OCLOTHING,0,0,1)
+	if(H.equip_to_slot_if_possible(rigchest,ITEM_SLOT_OCLOTHING,0,0,1))
 		to_chat(H, "The [rigchest] deploys from the control module.")
-	if(H.equip_to_slot_if_possible(riggloves,SLOT_GLOVES,0,0,1)
+	if(H.equip_to_slot_if_possible(riggloves,SLOT_GLOVES,0,0,1))
 		to_chat(H, "The [riggloves] deploys from the control module.")
-	if(H.equip_to_slot_if_possible(rigboots,SLOT_FEET,0,0,1)
+	if(H.equip_to_slot_if_possible(rigboots,ITEM_SLOT_FEET,0,0,1))
 		to_chat(H, "The [righelm] deploys from the control module.")
+
+/obj/item/clothing/head/helmet/rig
+	name = "righelm"
+	var/modclass = 1
+
+/obj/item/clothing/suit/rig
+	name = "rigchest"
+	var/modclass = 1
+
+/obj/item/clothing/shoes/magboots/rig
+	name = "rigboots"
+	var/modclass = 1
+
+/obj/item/clothing/gloves/rig
+	name = "riggloves"
+	var/modclass = 1
