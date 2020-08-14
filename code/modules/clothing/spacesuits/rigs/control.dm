@@ -9,8 +9,8 @@
 /obj/item/rigcontrol
 	name = "the metaphysical concept of resource integration gear"
 	desc = "Hey, report this on the github, this shouldn't exist at all ever."
-	icon_state = "spaceold"
-	item_state = "spaceold"
+	icon = 'icons/obj/iv_drip.dmi'
+	icon_state = "iv_drip"
 	armor = list("melee" = 0, "bullet" = 0, "laser" = 0,"energy" = 0, "bomb" = 0, "bio" = 100, "rad" = 100, "fire" = 100, "acid" = 100)
 	rad_flags = RAD_PROTECT_CONTENTS | RAD_NO_CONTAMINATE
 	slot_flags = ITEM_SLOT_BACK
@@ -37,19 +37,19 @@
 	var/heatmod = 1//heat generated modifier
 	//modules.
 	var/module_classes = list(
-	"head" = MODULE_CLASS_NONE,
-	"chest" = MODULE_CLASS_NONE,
-	"boots" = MODULE_CLASS_NONE,
-	"gloves" = MODULE_CLASS_NONE,
-	"vision" = MODULE_CLASS_VISION
+	head = MODULE_CLASS_NONE,
+	chest = MODULE_CLASS_NONE,
+	boots = MODULE_CLASS_NONE,
+	gloves = MODULE_CLASS_NONE,
+	vision = MODULE_CLASS_VISION
 	)
 
 	var/module_slots = list(
-	"head" = null,
-	"chest" = null,
-	"boots" = null,
-	"gloves" = null,
-	"vision" = null
+	head = null,
+	chest = null,
+	boots = null,
+	gloves = null,
+	vision = null
 	)
 
 /obj/item/rigcontrol/Initialize(mapload)
@@ -99,15 +99,23 @@
 
 
 /obj/item/rigcontrol/proc/deploy(mob/living/carbon/human/H)
+	if(!righelm)
+		return FALSE
+	if(!rigchest)
+		return FALSE
+	if(!riggloves)
+		return FALSE
+	if(!rigboots)
+		return FALSE
 	if(src.loc != H)
 		to_chat(H, "You can't deploy the suit if you're not wearing it!")
 	if(H.equip_to_slot_if_possible(righelm,SLOT_HEAD,0,0,1))
 		to_chat(H, "The [righelm] deploys from the control module.")
-	if(H.equip_to_slot_if_possible(rigchest,ITEM_SLOT_OCLOTHING,0,0,1))
+	if(H.equip_to_slot_if_possible(rigchest,SLOT_WEAR_SUIT,0,0,1))
 		to_chat(H, "The [rigchest] deploys from the control module.")
 	if(H.equip_to_slot_if_possible(riggloves,SLOT_GLOVES,0,0,1))
 		to_chat(H, "The [riggloves] deploys from the control module.")
-	if(H.equip_to_slot_if_possible(rigboots,ITEM_SLOT_FEET,0,0,1))
+	if(H.equip_to_slot_if_possible(rigboots,SLOT_SHOES,0,0,1))
 		to_chat(H, "The [righelm] deploys from the control module.")
 
 /obj/item/clothing/head/helmet/rig
