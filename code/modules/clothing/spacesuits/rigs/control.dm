@@ -14,6 +14,7 @@
 	armor = list("melee" = 0, "bullet" = 0, "laser" = 0,"energy" = 0, "bomb" = 0, "bio" = 100, "rad" = 100, "fire" = 100, "acid" = 100)
 	rad_flags = RAD_PROTECT_CONTENTS | RAD_NO_CONTAMINATE
 	slot_flags = ITEM_SLOT_BACK
+	w_class = WEIGHT_CLASS_BULKY
 	//pieces
 	var/obj/item/clothing/head/helmet/rig/righelm
 	var/obj/item/clothing/suit/rig/rigchest
@@ -29,12 +30,6 @@
 	var/offline_slowdown = 6
 	slowdown = 6// regular slowdown is always 0, pieces dictate slowdown
 	var/active = FALSE //we start uninitialized
-	//heat
-	var/heat_dissipation = 10 //10 degrees of heat removed every process tick
-	var/righeat = 293 //starts at 20 degreees c heat
-	var/maxheat = 400 //400 kelvin
-	var/insulated = FALSE //insulated rigs don't car about environment temp and dont heat up/cool down in wierd atmos.
-	var/heatmod = 1//heat generated modifier
 	//modules.
 	var/module_classes = list(
 	head = MODULE_CLASS_NONE,
@@ -53,15 +48,22 @@
 	)
 
 /obj/item/rigcontrol/Initialize(mapload)
+	. = ..()//bruh
 	START_PROCESSING(SSobj, src)
 	righelm = new /obj/item/clothing/head/helmet/rig(src)
+	righelm.suit = src
 	rigchest = new /obj/item/clothing/suit/rig(src)
+	rigchest.suit = src
 	rigboots = new /obj/item/clothing/shoes/magboots/rig(src)
+	rigboots.suit = src
 	riggloves = new /obj/item/clothing/gloves/rig(src)
+	riggloves.suit = src
+
 
 
 /obj/item/rigcontrol/Destroy()
 	STOP_PROCESSING(SSobj, src)
+
 
 /obj/item/rigcontrol/proc/partcheck()
 	if(!righelm)
@@ -78,18 +80,12 @@
 	module_classes["boots"] = rigboots.modclass
 	module_classes["gloves"] = riggloves.modclass
 
-	//heatmod
-//	heatmod = 1 + rigchest.heatmod + rigboots.heatmod               commented out intil i do things
-//	heat_dissipation = 10 + righelm.dissipation + rigchest.dissipation + rigboots.dissipation + riggloves.dissipation
-
-
-
 /obj/item/rigcontrol/AltClick(mob/user)
-	if(ishuman(user))
+	if(ishuman(user) && loc == user)
 		var/mob/living/carbon/human/H = user
 		deploy(H)
-
-
+	else
+		..()
 
 
 
@@ -121,15 +117,71 @@
 /obj/item/clothing/head/helmet/rig
 	name = "righelm"
 	var/modclass = 1
+	var/obj/item/rigcontrol/suit = null
+
+/obj/item/clothing/head/helmet/rig/dropped(mob/user)
+	..()
+	if(suit && !ismob(loc)) //equipped() will handle mob cases, so it doesn't disengage twice.
+		forceMove(suit)
+
+/obj/item/clothing/head/helmet/rig/equipped(mob/user, slot)
+	..()
+	if(slot != SLOT_HEAD)
+		if(suit)
+			forceMove(suit)
+		else
+			qdel(src)
 
 /obj/item/clothing/suit/rig
 	name = "rigchest"
 	var/modclass = 1
+	var/obj/item/rigcontrol/suit = null
+
+/obj/item/clothing/suit/rig/dropped(mob/user)
+	..()
+	if(suit && !ismob(loc)) //equipped() will handle mob cases, so it doesn't disengage twice.
+		forceMove(suit)
+
+/obj/item/clothing/suit/rig/equipped(mob/user, slot)
+	..()
+	if(slot != SLOT_WEAR_SUIT)
+		if(suit)
+			forceMove(suit)
+		else
+			qdel(src)
 
 /obj/item/clothing/shoes/magboots/rig
 	name = "rigboots"
 	var/modclass = 1
+	var/obj/item/rigcontrol/suit = null
+
+/obj/item/clothing/shoes/magboots/rig/dropped(mob/user)
+	..()
+	if(suit && !ismob(loc)) //equipped() will handle mob cases, so it doesn't disengage twice.
+		forceMove(suit)
+
+/obj/item/clothing/shoes/magboots/rig/equipped(mob/user, slot)
+	..()
+	if(slot != SLOT_SHOES)
+		if(suit)
+			forceMove(suit)
+		else
+			qdel(src)
 
 /obj/item/clothing/gloves/rig
 	name = "riggloves"
 	var/modclass = 1
+	var/obj/item/rigcontrol/suit = null
+
+/obj/item/clothing/gloves/rig/dropped(mob/user)
+	..()
+	if(suit && !ismob(loc)) //equipped() will handle mob cases, so it doesn't disengage twice.
+		forceMove(suit)
+
+/obj/item/clothing/suit/gloves/rig/equipped(mob/user, slot)
+	..()
+	if(slot != SLOT_GLOVES)
+		if(suit)
+			forceMove(suit)
+		else
+			qdel(src)
