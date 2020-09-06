@@ -4,6 +4,22 @@
 	if(!damage || (!forced && hit_percent <= 0))
 		return 0
 	var/damage_amount = forced ? damage : damage * hit_percent
+
+	if(istype(src, /mob/living/silicon/robot) && !forced)
+		var/mob/living/silicon/robot/R = src
+		if(R.shielded)
+			R.cell.charge -= min(R.shielded * 62.5, R.cell.charge)
+			if(R.cell.charge == 0)
+				to_chat(src, "<span class='notice'>Your shield has overloaded!</span>")
+			else
+				var/true_damage = damage
+				damage -= R.shielded
+				if(damage <= 0)
+					to_chat(R,"<span class='notice'>Your shield has taken an impact of [true_damage] force, and has negated all of its force!</span>")
+					return FALSE
+				to_chat(R,"<span class='notice'>Your shield has taken an impact of [true_damage] force, and has blocked [R.shielded] damage, resulting in [damage] force being applied.</span>")
+
+
 	switch(damagetype)
 		if(BRUTE)
 			adjustBruteLoss(damage_amount, forced = forced)

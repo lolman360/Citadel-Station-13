@@ -84,3 +84,10 @@
 	projectile_type = /obj/item/projectile/beam/mindflayer
 	select_name = "MINDFUCK"
 	fire_sound = 'sound/weapons/laser.ogg'
+
+/obj/item/ammo_casing/energy/twin
+	projectile_type = /obj/item/projectile/beam/weak/penetrator
+	e_cost = 50
+	select_name = "kill"
+	pellets = 2
+	variance = 10

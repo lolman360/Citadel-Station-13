@@ -5,6 +5,7 @@
 	icon = 'icons/mob/robot_items.dmi'
 
 
+
 /obj/item/borg/stun
 	name = "electrically-charged arm"
 	icon_state = "elecarm"
@@ -932,6 +933,68 @@
 	desc = "A robotic ID strip used for claiming and transferring mining points. Must be held in an active slot to transfer points."
 	access = list(ACCESS_MINING, ACCESS_MINING_STATION, ACCESS_MAILSORTING, ACCESS_MINERAL_STOREROOM)
 	icon_state = "data_1"
+
+//Droideka
+
+/obj/item/borg/roller
+	name = "collision autotargeter"
+	icon = 'icons/obj/device.dmi'
+	icon_state = "shield0"
+	flags_1 = CONDUCT_1
+	item_flags = NOBLUDGEON
+	var/cooldown_last_time
+
+/obj/item/borg/roller/afterattack(atom/target, mob/living/silicon/robot/user, proximity_flag, click_parameters)//	deploy time
+	if(!istype(user))
+		return FALSE
+	user.shielded = FALSE
+	user.update_icons()
+	if(!isturf(target))
+		user.visible_message("<span class='notice'>[user] whirrs and charges at [target]!</span>", "<span class='notice'>You charge at [target]!</span>")
+	walk_towards(user,target,0.1,10)
+	user.cell.charge -= 100
+	user.icon_state = "synd_hatin"
+	var/turf/T = get_turf(target)
+	var/safety = 15
+	while((get_turf(user) != T) && (safety > 0) && !(target.Adjacent(user)))
+		sleep(1)
+		safety--
+	if(target.Adjacent(user))
+		if(istype(target, /obj))
+			var/obj/O = target
+			user.visible_message("<span class='notice'>[user] collides with [O]!</span>", "<span class='notice'>You collide with [O]!</span>")
+			O.take_damage(20, BRUTE, "melee", 1, 100) //20 brute, melee, 100% armor pen. Pretty robust.
+		if(istype(target, /mob/living/carbon))
+			var/mob/living/carbon/C = target
+			user.visible_message("<span class='notice'>[user] smashes into [C]!</span>", "<span class='notice'>You violently impact [C]!</span>")
+			C.Knockdown(1, TRUE, FALSE, 0.1, 45) //45 stam, 0.1 hardstun and 1sec softstun
+			C.apply_damage_type(20, BRUTE)
+		user.icon_state = "synd_rollin"
+		walk(user,0)
+	return TRUE
+//todo: make this activate a "roll mode" that causes Bump()
+
+/obj/item/melee/borgclaw
+	name = "robot claws"
+	icon = 'icons/mob/robot_items.dmi'
+	icon_state = "cyborg_claw"
+	flags_1 = CONDUCT_1
+	force = 25
+
+/obj/item/borg/shield
+	name = "personal shielding"
+	desc = "A powerful experimental module that turns aside or absorbs incoming attacks at the cost of charge."
+	icon = 'icons/obj/shields.dmi'
+	icon_state = "eshield1"
+	var/shieldpower = 8
+
+
+/obj/item/borg/shield/attack_self(var/mob/living/silicon/robot/user)
+	if(user.shielded)
+		user.shielded = FALSE
+	else
+		user.shielded = shieldpower
+	user.update_icons()
 
 
 /**********************************************************************

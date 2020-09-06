@@ -8,7 +8,8 @@
 		add_overlay("laser")//Is this even used??? - Yes borg/inventory.dm
 	if(disabler)
 		add_overlay("disabler")//ditto
-
+	if(shielded)
+		add_overlay("[module.cyborg_base_icon]-shielded")
 	if(sleeper_g && module.sleeper_overlay)
 		add_overlay("[module.sleeper_overlay]_g[sleeper_nv ? "_nv" : ""]")
 	if(sleeper_r && module.sleeper_overlay)

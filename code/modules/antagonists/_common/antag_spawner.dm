@@ -188,6 +188,10 @@
 	name = "syndicate saboteur teleporter"
 	borg_to_spawn = "Saboteur"
 
+/obj/item/antag_spawner/nuke_ops/borg_tele/syndeka
+	name = "syndicate rapid offensive unit teleporter"
+	borg_to_spawn = "Syndeka"
+
 /obj/item/antag_spawner/nuke_ops/borg_tele/spawn_antag(client/C, turf/T, kind, datum/mind/user)
 	var/mob/living/silicon/robot/R
 	var/datum/antagonist/nukeop/creator_op = user.has_antag_datum(/datum/antagonist/nukeop,TRUE)
@@ -199,6 +203,8 @@
 			R = new /mob/living/silicon/robot/modules/syndicate/medical(T)
 		if("Saboteur")
 			R = new /mob/living/silicon/robot/modules/syndicate/saboteur(T)
+		if("Syndeka")
+			R = new /mob/living/silicon/robot/modules/syndicate/syndeka(T)
 		else
 			R = new /mob/living/silicon/robot/modules/syndicate(T) //Assault borg by default
 

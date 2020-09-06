@@ -246,3 +246,23 @@
 		chambered.BB.damage *= 5
 
 	process_fire(target, user, TRUE, params)
+
+
+/obj/item/gun/energy/twinlaser
+	name = "twin-linked lasrifle"
+	can_charge = TRUE
+	icon_state = "LaserAK"
+	item_state = "laser"
+	desc = "Twin laser gun. It's two in one. With a linked trigger group. One could say it's... twin-linked." //8th made twinlinked guns make sense so this joke isn't as good anymore
+	charge_delay = 3
+	ammo_type = list(/obj/item/ammo_casing/energy/twin)
+
+/obj/item/gun/energy/twinlaser/cyborg
+	name = "laser arms"
+	icon = 'icons/mob/robot_items.dmi'
+	icon_state = "laser_cyborg"
+	item_state = null
+	automatic = 1 //fun!
+	desc = "The Syndicate Rapid Assault cyborg has two arm-like extremeties. One set typically mounts claws while the other mounts a twin laser array."
+	use_cyborg_cell = TRUE
+	selfcharge = EGUN_NO_SELFCHARGE

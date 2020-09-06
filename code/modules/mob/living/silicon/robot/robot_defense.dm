@@ -189,3 +189,11 @@
 	updatehealth()
 	if(prob(75) && P.damage > 0)
 		spark_system.start()
+
+/mob/living/silicon/robot/flash_act(intensity, override_blindness_check, affect_silicon, visual, type)
+	if(shielded && affect_silicon)
+		src.cell.charge -=250
+		to_chat(src,"<span class='notice'>Your shield has blocked a flash.</span>")
+		return FALSE
+	if(affect_silicon)
+		return ..()

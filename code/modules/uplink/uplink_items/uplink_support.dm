@@ -34,6 +34,15 @@
 	cost = 65
 	restricted = TRUE
 
+/datum/uplink_item/support/reinforcement/assault_borg
+	name = "Syndicate Rapid Offense Cyborg"
+	desc = "A cyborg designed and programmed for systematic extermination of non-Syndicate personnel. \
+			Comes equipped with a claws, laser blasters, the ability to roll and an advanced energy shield, as well as an emag, pinpointer, flash and crowbar."
+	item = /obj/item/antag_spawner/nuke_ops/borg_tele/syndeka
+	refundable = TRUE
+	cost = 60
+	restricted = TRUE
+
 /datum/uplink_item/support/reinforcement/medical_borg
 	name = "Syndicate Medical Cyborg"
 	desc = "A combat medical cyborg. Has limited offensive potential, but makes more than up for it with its support capabilities. \

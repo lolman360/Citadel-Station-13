@@ -5,6 +5,8 @@
 	icon_state = "robot"
 	bubble_icon = "robot"
 
+
+
 /mob/living/silicon/robot/get_cell()
 	return cell
 
@@ -746,6 +748,20 @@
 
 /mob/living/silicon/robot/modules/syndicate/ResetModule()
 	return
+
+/mob/living/silicon/robot/modules/syndicate/syndeka
+	icon_state = "synd_rollin"
+	faction = list(ROLE_SYNDICATE)
+	bubble_icon = "syndibot"
+	req_access = list(ACCESS_SYNDICATE)
+	lawupdate = FALSE
+	scrambledcodes = TRUE // These are rogue borgs.
+	ionpulse = TRUE
+	playstyle_string = "<span class='big bold'>You are a Syndicate rapid offense cyborg!</span><br>\
+							<b>You are armed with offensive tools and a selection of mobility aids to support you in your mission: help the operatives secure the nuclear authentication disk. \
+							Your disk pinpointer will find and locate the nuclear disk. \
+							<i>Help the operatives secure the disk at all costs!</i></b>"
+	set_module = /obj/item/robot_module/syndeka
 
 /mob/living/silicon/robot/modules/syndicate/medical
 	icon_state = "synd_medical"

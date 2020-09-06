@@ -69,6 +69,7 @@
 
 	var/toner = 0
 	var/tonermax = 40
+	var/shielded = FALSE
 
 	var/lamp_max = 10 //Maximum brightness of a borg lamp. Set as a var for easy adjusting.
 	var/lamp_intensity = 0 //Luminosity of the headlamp. 0 is off. Higher settings than the minimum require power.
